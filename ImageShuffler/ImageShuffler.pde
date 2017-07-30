@@ -1,5 +1,7 @@
 PImage img;
 
+// found settings and variable size through https://forum.processing.org/two/discussion/12079/problem-with-3-x-pimage-and-size-errors
+// thanks https://forum.processing.org/two/profile/56/GoToLoop for pointing that out
 void settings()
 {
   img = loadImage("C5i6nblXEAIC4Ih.jpg");
