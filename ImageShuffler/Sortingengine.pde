@@ -1,6 +1,60 @@
 public final class Sortingengine
 {
-  void sortByRedHorizontal(int imgWidth, int imgHeight, int[] pixels)
+  public void sortHorizontal(int imgWidth, int imgHeight, int[] pixels, String order)
+  {
+    StringBuilder strBuilder = new StringBuilder(order);
+
+    for (int i = strBuilder.length() -1; i >= 0; i--)
+    {
+      switch(strBuilder.charAt(i))
+      {
+      case 'R':
+        sortByRedHorizontal(imgWidth, imgHeight, pixels);
+        break;
+      case 'G':
+        sortByGreenHorizontal(imgWidth, imgHeight, pixels);
+        break;
+      case 'B':
+        sortByBlueHorizontal(imgWidth, imgHeight, pixels);
+        break;
+      case 'A':
+
+        break;
+      default:
+        println("nothing found for color " + strBuilder.charAt(i));
+        break;
+      }
+    }
+  }
+
+  public void sortVertical(int imgWidth, int imgHeight, int[] pixels, String order)
+  {
+    StringBuilder strBuilder = new StringBuilder(order);
+
+    for (int i = strBuilder.length() -1; i >= 0; i--)
+    {
+      switch(strBuilder.charAt(i))
+      {
+      case 'R':
+        sortByRedVertical(imgWidth, imgHeight, pixels);
+        break;
+      case 'G':
+        sortByGreenVertical(imgWidth, imgHeight, pixels);
+        break;
+      case 'B':
+        sortByBlueVertical(imgWidth, imgHeight, pixels);
+        break;
+      case 'A':
+
+        break;
+      default:
+        println("nothing found for color " + strBuilder.charAt(i));
+        break;
+      }
+    }
+  }
+
+  private void sortByRedHorizontal(int imgWidth, int imgHeight, int[] pixels)
   {
     for (int y = 0; y < imgHeight; y++)
     {
@@ -41,7 +95,7 @@ public final class Sortingengine
     }
   }
 
-  void sortByGreenHorizontal(int imgWidth, int imgHeight, int[] pixels)
+  private void sortByGreenHorizontal(int imgWidth, int imgHeight, int[] pixels)
   {
     for (int y = 0; y < imgHeight; y++)
     {
@@ -83,7 +137,7 @@ public final class Sortingengine
     }
   }
 
-  void sortByBlueHorizontal(int imgWidth, int imgHeight, int[] pixels)
+  private void sortByBlueHorizontal(int imgWidth, int imgHeight, int[] pixels)
   {
     for (int y = 0; y < imgHeight; y++)
     {
@@ -125,54 +179,7 @@ public final class Sortingengine
     }
   }
 
-  void sortByRGBHorizontal(int imgWidth, int imgHeight, int[] pixels)
-  {
-    for (int y = 0; y < imgHeight; y++)
-    {
-      // set and reset variables
-      int pointer = 0;
-      int tempColor = 0;
-
-      // loop x values from 0 to max -1
-      for (int x = 0; x < imgWidth -1; x++)
-      {
-        // save first color of width
-        tempColor = pixels[x + y * imgWidth];
-
-        // extract rgba colors
-        //int a = (tempColor >> 24) & 0xFF;
-        int r = (tempColor >> 16) & 0xFF;
-        int g = (tempColor >> 8) & 0xFF;
-        int b = tempColor & 0xFF;
-
-        int rgb = r + g + b;
-
-        // set pointer to first unsorted element of current width
-        pointer = x + y * imgWidth;
-
-        // loop rest of array, search biggest color (messured by red)
-        for (int temp = x + 1; temp < imgWidth; temp++)
-        {
-          int compareColor = pixels[temp + y * imgWidth];
-          int compareR = (compareColor >> 16) & 0xFF;
-          int compareG = (compareColor >> 8) & 0xFF;
-          int compareB = compareColor & 0xFF;
-
-          if ((compareR + compareG + compareB) > rgb)
-          {
-            rgb = (compareR + compareG + compareB);
-            pointer = temp + y * imgWidth;
-          }
-        }
-
-        // exchange colors, highest remaining color is now sorted 
-        pixels[x + y * imgWidth] = pixels[pointer];
-        pixels[pointer] = tempColor;
-      }
-    }
-  }
-
-  void sortByRedVertical(int imgWidth, int imgHeight, int[] pixels)
+  private void sortByRedVertical(int imgWidth, int imgHeight, int[] pixels)
   {
     for (int x = 0; x < imgWidth; x++)
     {
@@ -213,7 +220,7 @@ public final class Sortingengine
     }
   }
 
-  void sortByGreenVertical(int imgWidth, int imgHeight, int[] pixels)
+  private void sortByGreenVertical(int imgWidth, int imgHeight, int[] pixels)
   {
     for (int x = 0; x < imgWidth; x++)
     {
@@ -254,7 +261,7 @@ public final class Sortingengine
     }
   }
 
-  void sortByBlueVertical(int imgWidth, int imgHeight, int[] pixels)
+  private void sortByBlueVertical(int imgWidth, int imgHeight, int[] pixels)
   {
     for (int x = 0; x < imgWidth; x++)
     {
@@ -295,7 +302,7 @@ public final class Sortingengine
     }
   }
 
-  void sortByRGBVertical(int imgWidth, int imgHeight, int[] pixels)
+  private void sortByRGBVertical(int imgWidth, int imgHeight, int[] pixels)
   {
     for (int x = 0; x < imgWidth; x++)
     {
@@ -350,9 +357,9 @@ public final class Sortingengine
       int tempColor = 0;
       int stripCounter = 0;
       int linestartOffset = (int) random(imgWidth) % stripsize;
-      
+
       // sort the offset
-      for( int x = 0; x < linestartOffset; x++)
+      for ( int x = 0; x < linestartOffset; x++)
       {
         tempColor = pixels[x + y * imgWidth];
         pointer = x + y * imgWidth;
@@ -361,9 +368,9 @@ public final class Sortingengine
         int r = (tempColor >> 16) & 0xFF;
         //int g = (tempColor >> 8) & 0xFF;
         //int b = tempColor & 0xFF;
-        
+
         int posInStrip = x % linestartOffset;
-        
+
         // search for the next highest sorted pixel in strip
         for (int i = posInStrip; i < linestartOffset; i++)
         {
@@ -398,9 +405,9 @@ public final class Sortingengine
         int r = (tempColor >> 16) & 0xFF;
         //int g = (tempColor >> 8) & 0xFF;
         //int b = tempColor & 0xFF;
-        
+
         int posInStrip = (x - linestartOffset) % stripsize;
-        
+
         // search for the next highest sorted pixel in strip
         for (int i = linestartOffset + (stripCounter * stripsize + posInStrip); i < linestartOffset + (stripCounter * stripsize + stripsize) && i < imgWidth; i++)
         {
