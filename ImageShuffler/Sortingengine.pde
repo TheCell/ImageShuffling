@@ -1,6 +1,10 @@
 public final class Sortingengine
 {
-  public void sortHorizontal(int imgWidth, int imgHeight, int[] pixels, String order)
+  public void horizontal(
+    int imgWidth, 
+    int imgHeight, 
+    int[] pixels, 
+    String order)
   {
     StringBuilder strBuilder = new StringBuilder(order);
 
@@ -27,7 +31,11 @@ public final class Sortingengine
     }
   }
 
-  public void sortVertical(int imgWidth, int imgHeight, int[] pixels, String order)
+  public void vertical(
+    int imgWidth, 
+    int imgHeight, 
+    int[] pixels, 
+    String order)
   {
     StringBuilder strBuilder = new StringBuilder(order);
 
@@ -54,7 +62,47 @@ public final class Sortingengine
     }
   }
 
-  private void sortByRedHorizontal(int imgWidth, int imgHeight, int[] pixels)
+  public void fuzzyStrips(
+    int imgWidth, 
+    int imgHeight, 
+    int stripSize, 
+    String order, 
+    int[] pixels
+    )
+  {
+    StringBuilder strBuilder = new StringBuilder(order);
+    Integer seed = (int) random(100);
+
+    for (int i = strBuilder.length() -1; i >= 0; i--)
+    {
+      switch(strBuilder.charAt(i))
+      {
+      case 'R':
+        randomSeed(seed);
+        fuzzyStripsRed(imgWidth, imgHeight, stripSize, pixels);
+        break;
+      case 'G':
+        randomSeed(seed);
+        fuzzyStripsGreen(imgWidth, imgHeight, stripSize, pixels);
+        break;
+      case 'B':
+        randomSeed(seed);
+        fuzzyStripsBlue(imgWidth, imgHeight, stripSize, pixels);
+        break;
+      case 'A':
+
+        break;
+      default:
+        println("nothing found for color " + strBuilder.charAt(i));
+        break;
+      }
+    }
+  }
+
+  private void sortByRedHorizontal(
+    int imgWidth, 
+    int imgHeight, 
+    int[] pixels)
   {
     for (int y = 0; y < imgHeight; y++)
     {
@@ -95,7 +143,10 @@ public final class Sortingengine
     }
   }
 
-  private void sortByGreenHorizontal(int imgWidth, int imgHeight, int[] pixels)
+  private void sortByGreenHorizontal(
+    int imgWidth, 
+    int imgHeight, 
+    int[] pixels)
   {
     for (int y = 0; y < imgHeight; y++)
     {
@@ -137,7 +188,10 @@ public final class Sortingengine
     }
   }
 
-  private void sortByBlueHorizontal(int imgWidth, int imgHeight, int[] pixels)
+  private void sortByBlueHorizontal(
+    int imgWidth, 
+    int imgHeight, 
+    int[] pixels)
   {
     for (int y = 0; y < imgHeight; y++)
     {
@@ -179,7 +233,10 @@ public final class Sortingengine
     }
   }
 
-  private void sortByRedVertical(int imgWidth, int imgHeight, int[] pixels)
+  private void sortByRedVertical(
+    int imgWidth, 
+    int imgHeight, 
+    int[] pixels)
   {
     for (int x = 0; x < imgWidth; x++)
     {
@@ -220,7 +277,10 @@ public final class Sortingengine
     }
   }
 
-  private void sortByGreenVertical(int imgWidth, int imgHeight, int[] pixels)
+  private void sortByGreenVertical(
+    int imgWidth, 
+    int imgHeight, 
+    int[] pixels)
   {
     for (int x = 0; x < imgWidth; x++)
     {
@@ -261,7 +321,10 @@ public final class Sortingengine
     }
   }
 
-  private void sortByBlueVertical(int imgWidth, int imgHeight, int[] pixels)
+  private void sortByBlueVertical(
+    int imgWidth, 
+    int imgHeight, 
+    int[] pixels)
   {
     for (int x = 0; x < imgWidth; x++)
     {
@@ -302,7 +365,10 @@ public final class Sortingengine
     }
   }
 
-  private void sortByRGBVertical(int imgWidth, int imgHeight, int[] pixels)
+  private void sortByRGBVertical(
+    int imgWidth, 
+    int imgHeight, 
+    int[] pixels)
   {
     for (int x = 0; x < imgWidth; x++)
     {
@@ -348,7 +414,11 @@ public final class Sortingengine
     }
   }
 
-  void fuzzyStripsRed(int stripsize, int imgWidth, int imgHeight, int[] pixels)
+  private void fuzzyStripsRed(
+    int imgWidth, 
+    int imgHeight, 
+    int stripSize, 
+    int[] pixels)
   {
     for (int y = 0; y < imgHeight; y++)
     {
@@ -356,7 +426,7 @@ public final class Sortingengine
       int pointer = 0;
       int tempColor = 0;
       int stripCounter = 0;
-      int linestartOffset = (int) random(imgWidth) % stripsize;
+      int linestartOffset = (int) random(imgWidth) % stripSize;
 
       // sort the offset
       for ( int x = 0; x < linestartOffset; x++)
@@ -393,7 +463,7 @@ public final class Sortingengine
       for (int x = linestartOffset; x < imgWidth; x++)
       {
         // increase the stripCounter after completing a strip
-        if ( x > linestartOffset && (x - linestartOffset) % stripsize == 0)
+        if ( x > linestartOffset && (x - linestartOffset) % stripSize == 0)
         {
           stripCounter++;
         }
@@ -406,10 +476,10 @@ public final class Sortingengine
         //int g = (tempColor >> 8) & 0xFF;
         //int b = tempColor & 0xFF;
 
-        int posInStrip = (x - linestartOffset) % stripsize;
+        int posInStrip = (x - linestartOffset) % stripSize;
 
         // search for the next highest sorted pixel in strip
-        for (int i = linestartOffset + (stripCounter * stripsize + posInStrip); i < linestartOffset + (stripCounter * stripsize + stripsize) && i < imgWidth; i++)
+        for (int i = linestartOffset + (stripCounter * stripSize + posInStrip); i < linestartOffset + (stripCounter * stripSize + stripSize) && i < imgWidth; i++)
         {
           int compareColor = pixels[i + y * imgWidth];
           int compareR = (compareColor >> 16) & 0xFF;
@@ -417,6 +487,174 @@ public final class Sortingengine
           if (compareR > r)
           {
             r = compareR;
+            pointer = i + y * imgWidth;
+          }
+        }
+
+        // swap pixels
+        pixels[x + y * imgWidth] = pixels[pointer];
+        pixels[pointer] = tempColor;
+      }
+    }
+  }
+
+  private void fuzzyStripsGreen(
+    int imgWidth, 
+    int imgHeight, 
+    int stripSize, 
+    int[] pixels)
+  {
+    for (int y = 0; y < imgHeight; y++)
+    {
+      // set and reset variables
+      int pointer = 0;
+      int tempColor = 0;
+      int stripCounter = 0;
+      int linestartOffset = (int) random(imgWidth) % stripSize;
+
+      // sort the offset
+      for ( int x = 0; x < linestartOffset; x++)
+      {
+        tempColor = pixels[x + y * imgWidth];
+        pointer = x + y * imgWidth;
+        // extract rgba colors
+        //int a = (tempColor >> 24) & 0xFF;
+        //int r = (tempColor >> 16) & 0xFF;
+        int g = (tempColor >> 8) & 0xFF;
+        //int b = tempColor & 0xFF;
+
+        int posInStrip = x % linestartOffset;
+
+        // search for the next highest sorted pixel in strip
+        for (int i = posInStrip; i < linestartOffset; i++)
+        {
+          int compareColor = pixels[i + y * imgWidth];
+          int compareG = (compareColor >> 8) & 0xFF;
+
+          if (compareG > g)
+          {
+            g = compareG;
+            pointer = i + y * imgWidth;
+          }
+        }
+
+        // swap pixels
+        pixels[x + y * imgWidth] = pixels[pointer];
+        pixels[pointer] = tempColor;
+      }
+
+      // loop x values from linestartOffset to max -1
+      for (int x = linestartOffset; x < imgWidth; x++)
+      {
+        // increase the stripCounter after completing a strip
+        if ( x > linestartOffset && (x - linestartOffset) % stripSize == 0)
+        {
+          stripCounter++;
+        }
+
+        tempColor = pixels[x + y * imgWidth];
+        pointer = x + y * imgWidth;
+        // extract rgba colors
+        //int a = (tempColor >> 24) & 0xFF;
+        //int r = (tempColor >> 16) & 0xFF;
+        int g = (tempColor >> 8) & 0xFF;
+        //int b = tempColor & 0xFF;
+
+        int posInStrip = (x - linestartOffset) % stripSize;
+
+        // search for the next highest sorted pixel in strip
+        for (int i = linestartOffset + (stripCounter * stripSize + posInStrip); i < linestartOffset + (stripCounter * stripSize + stripSize) && i < imgWidth; i++)
+        {
+          int compareColor = pixels[i + y * imgWidth];
+          int compareG = (compareColor >> 8) & 0xFF;
+
+          if (compareG > g)
+          {
+            g = compareG;
+            pointer = i + y * imgWidth;
+          }
+        }
+
+        // swap pixels
+        pixels[x + y * imgWidth] = pixels[pointer];
+        pixels[pointer] = tempColor;
+      }
+    }
+  }
+
+  private void fuzzyStripsBlue(
+    int imgWidth, 
+    int imgHeight, 
+    int stripSize, 
+    int[] pixels)
+  {
+    for (int y = 0; y < imgHeight; y++)
+    {
+      // set and reset variables
+      int pointer = 0;
+      int tempColor = 0;
+      int stripCounter = 0;
+      int linestartOffset = (int) random(imgWidth) % stripSize;
+
+      // sort the offset
+      for ( int x = 0; x < linestartOffset; x++)
+      {
+        tempColor = pixels[x + y * imgWidth];
+        pointer = x + y * imgWidth;
+        // extract rgba colors
+        //int a = (tempColor >> 24) & 0xFF;
+        //int r = (tempColor >> 16) & 0xFF;
+        //int g = (tempColor >> 8) & 0xFF;
+        int b = tempColor & 0xFF;
+
+        int posInStrip = x % linestartOffset;
+
+        // search for the next highest sorted pixel in strip
+        for (int i = posInStrip; i < linestartOffset; i++)
+        {
+          int compareColor = pixels[i + y * imgWidth];
+          int compareB = (compareColor & 0xFF);
+
+          if (compareB > b)
+          {
+            b = compareB;
+            pointer = i + y * imgWidth;
+          }
+        }
+
+        // swap pixels
+        pixels[x + y * imgWidth] = pixels[pointer];
+        pixels[pointer] = tempColor;
+      }
+
+      // loop x values from linestartOffset to max -1
+      for (int x = linestartOffset; x < imgWidth; x++)
+      {
+        // increase the stripCounter after completing a strip
+        if ( x > linestartOffset && (x - linestartOffset) % stripSize == 0)
+        {
+          stripCounter++;
+        }
+
+        tempColor = pixels[x + y * imgWidth];
+        pointer = x + y * imgWidth;
+        // extract rgba colors
+        //int a = (tempColor >> 24) & 0xFF;
+        //int r = (tempColor >> 16) & 0xFF;
+        //int g = (tempColor >> 8) & 0xFF;
+        int b = tempColor & 0xFF;
+
+        int posInStrip = (x - linestartOffset) % stripSize;
+
+        // search for the next highest sorted pixel in strip
+        for (int i = linestartOffset + (stripCounter * stripSize + posInStrip); i < linestartOffset + (stripCounter * stripSize + stripSize) && i < imgWidth; i++)
+        {
+          int compareColor = pixels[i + y * imgWidth];
+          int compareB = (compareColor & 0xFF);
+
+          if (compareB > b)
+          {
+            b = compareB;
             pointer = i + y * imgWidth;
           }
         }

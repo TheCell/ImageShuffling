@@ -16,11 +16,11 @@ void setup()
 {
   loadPixels();
   sorter = new Sortingengine();
-  
-  sorter.sortHorizontal(img.width, img.height, img.pixels, "RGB");
-  sorter.sortVertical(img.width, img.height, img.pixels, "RGB");
 
-  //sorter.fuzzyStripsRed(50, img.width, img.height, img.pixels);
+  //sorter.horizontal(img.width, img.height, img.pixels, "RGB");
+  //sorter.vertical(img.width, img.height, img.pixels, "RGB");
+
+  sorter.fuzzyStrips(img.width, img.height, 50, "RGB", img.pixels);
 
   updatePixels();
   image(img, 0, 0);
