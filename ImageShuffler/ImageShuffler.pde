@@ -19,8 +19,9 @@ void settings()
 {
   //img = loadImage("C5i6nblXEAIC4Ih.jpg");
   //img = loadImage("25K_BURNER.jpg");
-  img = loadImage("eclipse.jpg");
+  //img = loadImage("eclipse.jpg");
   //img = loadImage("img_lights.jpg");
+  img = loadImage("meSnowboarding.png");
   size(img.width, img.height);
 }
 
