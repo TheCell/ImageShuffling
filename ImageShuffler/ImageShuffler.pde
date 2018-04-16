@@ -40,5 +40,17 @@ void setup()
   noLoop();
 }
 
+void keyTyped()
+{
+    //System.out.println(int(key));
+  
+    // s
+    if (int(key) == 115)
+    {
+        print("save as " + millis() + ".png");
+        save( millis() + ".png");
+    }
+}
+
 void loop() {
 }
